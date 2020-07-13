@@ -7,7 +7,9 @@ _state = threading.local()
 
 
 class Program(Block):
-    template = """org 100h
+    template = """{includes}
+
+org 100h
 
 .model {model}
 .stack {stack}
@@ -15,18 +17,24 @@ class Program(Block):
 .data
 {data}
 
+{defines}
+
 .code
 {children}"""
 
-    def __init__(self, model='small', stack=0x100):
+    def __init__(self, includes=(), model='small', stack=0x100):
         self.model = model
         self.stack = stack
+        self.includes = set(includes)
+        self.defines = set()
 
         self.data = []
         super().__init__()
 
     def render(self):
         return self.template.format(
+            includes='\n'.join([f"include {inc}" for inc in self.includes]),
+            defines='\n'.join(self.defines),
             model=self.model,
             stack=format_number(self.stack),
             data='\n'.join(d.render() for d in self.data),

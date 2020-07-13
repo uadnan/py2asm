@@ -4,8 +4,9 @@ _state = threading.local()
 
 
 class LeafBlock:
-    def __init__(self):
-        _state.active_block.append(self)
+    def __init__(self, should_register=True):
+        if should_register:
+            _state.active_block.append(self)
         super().__init__()
 
     def render(self):

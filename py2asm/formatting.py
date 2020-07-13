@@ -23,9 +23,10 @@ def format_argument(arg):
     if isinstance(arg, SafeStr):
         return arg
 
-    from py2asm.data import DefineFunction
+    from py2asm.variables import Variable
+    from py2asm.types import Register
 
-    if isinstance(arg, DefineFunction):
+    if isinstance(arg, Variable) or isinstance(arg, Register):
         return arg.name
 
     if isinstance(arg, str):

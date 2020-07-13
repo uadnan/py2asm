@@ -19,10 +19,13 @@ class Function(InstructionGroupMixin, LeafBlock):
 
 
 class Raw(Function):
-    def __init__(self, *instructions):
+    def __init__(self, should_register=True, *instructions):
         self.instructions = instructions
 
-        super().__init__()
+        super().__init__(should_register)
 
     def get_instructions(self):
         return self.instructions
+
+    def render(self):
+        return '\n'.join(c if type(c) == str else c.render() for c in self.get_instructions()) + '\n'

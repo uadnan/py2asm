@@ -75,3 +75,22 @@ main proc
     
 main endp
 end main""")
+
+    def test_labeled_block(self):
+        with asm.Program() as program:
+            with asm.LabeledBlock('test') as test:
+                asm.PrintChar('?')
+
+            print(program.render())
+
+
+    def test_test(self):
+        with asm.Program() as p:
+            n1 = asm.Variable('n1', asm.VariableType.BYTE, 0)
+            n2 = asm.Variable('n2', asm.VariableType.BYTE, 1)
+            count = asm.Variable('count', asm.VariableType.BYTE, 0)
+
+            with asm.LabeledBlock('loop'):
+                asm.PrintNum(n1)
+
+            print(p.render())
