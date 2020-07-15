@@ -92,22 +92,22 @@ class PrintType(Enum):
     # TODO: PRINT_NUM
 
 
-class Print(Function):
-    def __init__(self, data, fn_type=None):
+class Print:
+    def __init__(self, data, print_type=None):
         self.data = data
 
-        if fn_type is not None:
-            self.fn_type = fn_type
+        if print_type is not None:
+            self.printer = print_type
         elif isinstance(data, str) and len(data) > 1:
-            self.fn_type = PrintType.PRINT_STR_BUILTIN
+            self.printer = PrintType.PRINT_STR_BUILTIN
         elif isinstance(data, str) and len(data) == 1:
-            self.fn_type = PrintType.PRINT_CHAR
+            self.printer = PrintType.PRINT_CHAR
         elif isinstance(data, int):
-            self.fn_type = PrintType.PRINT_NUM_BUILTIN
+            self.printer = PrintType.PRINT_NUM_BUILTIN
         else:
             raise ValueError("print fn_type must be specified for data of type {}".format(type(data)))
 
-        super().__init__()
+        self.printer = self.printer.value(self.data)
 
     def get_instructions(self):
-        return self.fn_type.value(self.data).get_instructions()
+        return self.printer.get_instructions()
