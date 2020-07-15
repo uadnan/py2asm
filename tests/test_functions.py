@@ -9,7 +9,7 @@ class FunctionTests(unittest.TestCase):
             with asm.Procedure('main'):
                 message = asm.DefineByte('message', 'Hello World', 0x0d, 0xa, '$')
 
-                asm.PrintString(message)
+                asm.PrintStr(message)
 
             self.assertEqual(program.render(), """org 100h
 

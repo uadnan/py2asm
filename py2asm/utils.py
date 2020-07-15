@@ -6,14 +6,14 @@ class SafeStr(str):
 
 
 def format_number(n):
-    n = '{:02X}'.format(n)
-    if len(n) % 2 != 0:
-        n = '0' + n
+    s = '{:02X}'.format(abs(n))
+    if len(s) % 2 != 0:
+        s = '0' + s
 
-    if not n[0].isdigit():
-        n = '0' + n
+    if not s[0].isdigit():
+        s = '0' + s
 
-    return n + 'h'
+    return ('-' if n < 0 else '') + s + 'h'
 
 
 def format_argument(arg):
@@ -23,7 +23,7 @@ def format_argument(arg):
     if isinstance(arg, SafeStr):
         return arg
 
-    from py2asm.variables import Variable, Define
+    from py2asm.data import Variable, Define
     from py2asm.types import Register
 
     if isinstance(arg, Variable) or isinstance(arg, Register) or isinstance(arg, Define):

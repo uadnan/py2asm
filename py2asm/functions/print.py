@@ -1,21 +1,23 @@
 import threading
+from enum import Enum
 
 from py2asm.blocks import Program
-from py2asm.variables import Variable
+from py2asm.data import Variable
 from py2asm.types import Register
-from py2asm.functions.base import Function
+from py2asm.functions.base import Function, Raw
 from py2asm.functions.groups import BiosProcedureCall
 from py2asm.instructions import Lea, Mov, Call
+from py2asm.utils import format_argument
 
 _state = threading.local()
 
 
-class PrintString(Function):
-    def __init__(self, data_var):
-        if not isinstance(data_var, (int, Variable)):
-            raise ValueError('Unsupported type: {}'.format(type(data_var)))
+class PrintStr(Function):
+    def __init__(self, data):
+        if not isinstance(data, (int, Variable)):
+            raise ValueError('Unsupported type: {}'.format(type(data)))
 
-        self.data_var = data_var
+        self.data_var = data
         super().__init__()
 
     def get_instructions(self):
@@ -26,14 +28,14 @@ class PrintString(Function):
 
 
 class PrintChar(Function):
-    def __init__(self, data_var):
-        if not isinstance(data_var, (int, str, Variable, Register)):
-            raise ValueError('Unsupported type: {}'.format(type(data_var)))
+    def __init__(self, data):
+        if not isinstance(data, (int, str, Variable, Register)):
+            raise ValueError('Unsupported type: {}'.format(type(data)))
 
-        if isinstance(data_var, str) and len(data_var) != 1:
-            raise ValueError('Invalid string length: {}'.format(len(data_var)))
+        if isinstance(data, str) and len(data) != 1:
+            raise ValueError('Invalid string length: {}'.format(len(data)))
 
-        self.data_var = data_var
+        self.data_var = data
         super().__init__()
 
     def get_instructions(self):
@@ -43,20 +45,57 @@ class PrintChar(Function):
         )
 
 
-class PrintNum(Function):
-    def __init__(self, data_var):
-        if not isinstance(data_var, (int, Variable, Register)):
-            raise ValueError('Unsupported type: {}'.format(type(data_var)))
+class PrintStrBuiltin(Function):
+    def __init__(self, data):
+        if not isinstance(data, (str, Variable)):
+            raise ValueError('Unsupported type: {}'.format(type(data)))
 
-        self.data_var = data_var
+        self.data = data
+        Program.get_current().includes.add('emu8086.inc')
+        super().__init__()
+
+    def get_instructions(self):
+        return (
+            Raw(
+                "{name:<8} {operand}".format(
+                    name="PRINT",
+                    operand=format_argument(self.data)
+                ),
+                should_register=False
+            ),
+        )
+
+
+class PrintNum(Function):
+    def __init__(self, data):
+        if not isinstance(data, (int, Variable, Register)):
+            raise ValueError('Unsupported type: {}'.format(type(data)))
+
+        self.data_var = data
         Program.get_current().includes.add('emu8086.inc')
         Program.get_current().defines.add('DEFINE_PRINT_NUM_UNS')
         Program.get_current().defines.add('DEFINE_PRINT_NUM')
         super().__init__()
 
     def get_instructions(self):
-        # TODO: add call instruction
         return (
             Mov(Register.AX, self.data_var),
             Call("PRINT_NUM")
         )
+
+
+class PrintType(Enum):
+    PRINT_STR = PrintStr
+    PRINT_STR_BUILTIN = PrintStrBuiltin
+    PRINT_CHAR = PrintChar
+    PRINT_NUM_BUILTIN = PrintNum
+    # TODO: PRINT_NUM
+
+
+class Print(Function):
+    def __init__(self, data, fn_type):
+        self.data = data
+        self.fn_type = fn_type
+
+    def get_instructions(self):
+        return self.fn_type(self.data).get_instructions()
