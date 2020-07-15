@@ -11,9 +11,9 @@ if __name__ == "__main__":
         n = asm.Variable('n', asm.VariableType.BYTE, 10)
         x = asm.Variable('x', asm.VariableType.WORD)
 
-        asm.Raw("PRINT    \"How many random numbers you want: \"")
+        asm.Print("How many random numbers you want: ")
         asm.InputChar()
-        asm.Raw("PRINT    \", \"")
+        asm.Print(", ")
 
         asm.Raw(
             asm.Mov(n, asm.Register.AL),
@@ -23,7 +23,7 @@ if __name__ == "__main__":
         with asm.While(count < n):
             x <<= (a * x + c) % m
             asm.PrintNum(x)
-            asm.Raw("PRINT    \", \"")
+            asm.Print(", ")
             count += 1
 
         print(p.render())

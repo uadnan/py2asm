@@ -8,8 +8,8 @@ if __name__ == "__main__":
         count = asm.Variable('count', asm.VariableType.BYTE, 0)
 
         with asm.While(count < 10):
-            asm.PrintNum(n1)
-            asm.Raw("PRINT    \", \"")
+            asm.Print(n1, asm.PrintType.PRINT_NUM_BUILTIN)
+            asm.Print(", ")
             n1 + n2
             n1 <<= n2
             n2 <<= asm.Register.AX

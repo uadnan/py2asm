@@ -93,9 +93,21 @@ class PrintType(Enum):
 
 
 class Print(Function):
-    def __init__(self, data, fn_type):
+    def __init__(self, data, fn_type=None):
         self.data = data
-        self.fn_type = fn_type
+
+        if fn_type is not None:
+            self.fn_type = fn_type
+        elif isinstance(data, str) and len(data) > 1:
+            self.fn_type = PrintType.PRINT_STR_BUILTIN
+        elif isinstance(data, str) and len(data) == 1:
+            self.fn_type = PrintType.PRINT_CHAR
+        elif isinstance(data, int):
+            self.fn_type = PrintType.PRINT_NUM_BUILTIN
+        else:
+            raise ValueError("print fn_type must be specified for data of type {}".format(type(data)))
+
+        super().__init__()
 
     def get_instructions(self):
-        return self.fn_type(self.data).get_instructions()
+        return self.fn_type.value(self.data).get_instructions()
