@@ -20,6 +20,7 @@ class BlockBase:
         self.parent = getattr(_state, 'active_block', None)
         if self.parent is None:
             self.root = self
+            self.loop_counter = 0
         else:
             self.root = self.parent.root
             self.parent.append(self)

@@ -1,5 +1,6 @@
-from .blocks import *
-from .types import Register, SegmentRegister, AsmType
-from .variables import Variable, VariableType
-from .functions import *
 from .instructions import *
+from .blocks import *
+from .constants import JumpTypes
+from .functions import *
+from .variables import Variable, VariableType, Define
+from .types import Register, SegmentRegister, AsmType

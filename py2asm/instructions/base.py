@@ -1,4 +1,4 @@
-from py2asm.formatting import format_argument
+from py2asm.utils import format_argument
 
 
 class Instruction:
@@ -23,3 +23,8 @@ class Instruction:
 
     def render_operands(self):
         return ', '.join(format_argument(arg) for arg in self.args)
+
+
+class Nop(Instruction):
+    name = 'NOP'
+    n_args = 0

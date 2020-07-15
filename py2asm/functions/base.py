@@ -19,7 +19,7 @@ class Function(InstructionGroupMixin, LeafBlock):
 
 
 class Raw(Function):
-    def __init__(self, should_register=True, *instructions):
+    def __init__(self, *instructions, should_register=True):
         self.instructions = instructions
 
         super().__init__(should_register)

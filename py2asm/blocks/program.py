@@ -1,7 +1,7 @@
 import threading
 
 from py2asm.blocks.block import Block
-from py2asm.formatting import format_number
+from py2asm.utils import format_number
 
 _state = threading.local()
 

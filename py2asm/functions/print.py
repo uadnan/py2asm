@@ -3,9 +3,9 @@ import threading
 from py2asm.blocks import Program
 from py2asm.variables import Variable
 from py2asm.types import Register
-from py2asm.functions.base import Function, Raw
+from py2asm.functions.base import Function
 from py2asm.functions.groups import BiosProcedureCall
-from py2asm.instructions.transfer import Lea, Mov
+from py2asm.instructions import Lea, Mov, Call
 
 _state = threading.local()
 
@@ -58,5 +58,5 @@ class PrintNum(Function):
         # TODO: add call instruction
         return (
             Mov(Register.AX, self.data_var),
-            Raw(False, "CALL PRINT_NUM")
+            Call("PRINT_NUM")
         )
