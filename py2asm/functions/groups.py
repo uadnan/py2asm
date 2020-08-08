@@ -1,4 +1,4 @@
-from py2asm.types import Register
+from py2asm.registers import Register
 from py2asm.functions.base import InstructionGroup
 from py2asm.instructions import Mov
 from py2asm.instructions.interrupts import Int

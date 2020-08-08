@@ -7,23 +7,17 @@ if __name__ == "__main__":
         a = asm.Define('a', 0x1fb9)
         c = asm.Define('c', 0x6efb)
 
-        count = asm.Variable('count', asm.VariableType.BYTE, 0)
-        n = asm.Variable('n', asm.VariableType.BYTE, 10)
         x = asm.Variable('x', asm.VariableType.WORD)
 
-        asm.Print("How many random numbers you want: ")
-        asm.InputChar()
-        asm.Print(", ")
-
         asm.Raw(
-            asm.Mov(n, asm.Register.AL),
-            asm.Sub(n, 48),
+            asm.Mov(asm.Register.AH, 0),
+            asm.Int(0x1A),
+            asm.Mov(x, asm.Register.CX)
         )
 
-        with asm.While(count < n):
+        with asm.LabeledBlock('loop'):
             x <<= (a * x + c) % m
             asm.PrintNum(x)
             asm.Print(", ")
-            count += 1
 
         print(p.render())

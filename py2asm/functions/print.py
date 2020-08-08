@@ -3,7 +3,7 @@ from enum import Enum
 
 from py2asm.blocks import Program
 from py2asm.data import Variable
-from py2asm.types import Register
+from py2asm.registers import Register
 from py2asm.functions.base import Function, Raw
 from py2asm.functions.groups import BiosProcedureCall
 from py2asm.instructions import Lea, Mov, Call

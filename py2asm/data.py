@@ -2,7 +2,8 @@ from py2asm.blocks import Program
 from py2asm.utils import mark_safe, format_argument
 from py2asm.instructions import Add, Sub, Mov, Inc, Dec
 from py2asm.functions.base import Raw
-from py2asm.types import AsmType, Register
+from py2asm.types import AsmType
+from py2asm.registers import Register
 
 
 class Define(AsmType):

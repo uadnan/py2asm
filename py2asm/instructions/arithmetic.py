@@ -8,8 +8,22 @@ class Add(Instruction):
         super().__init__(destination, source)
 
 
+class Adc(Instruction):
+    name = 'ADC'
+
+    def __init__(self, destination, source):
+        super().__init__(destination, source)
+
+
 class Sub(Instruction):
     name = 'SUB'
+
+    def __init__(self, destination, source):
+        super().__init__(destination, source)
+
+
+class Sbb(Instruction):
+    name = 'SBB'
 
     def __init__(self, destination, source):
         super().__init__(destination, source)
@@ -92,4 +106,44 @@ class Not(Instruction):
 
 class Test(Instruction):
     name = 'TEST'
+    n_args = 2
+
+
+class Shl(Instruction):
+    name = 'SHL'
+    n_args = 2
+
+
+class Shr(Instruction):
+    name = 'SHR'
+    n_args = 2
+
+
+class Sal(Instruction):
+    name = 'SAL'
+    n_args = 2
+
+
+class Sar(Instruction):
+    name = 'SAR'
+    n_args = 2
+
+
+class Ror(Instruction):
+    name = 'SHL'
+    n_args = 2
+
+
+class Rol(Instruction):
+    name = 'SHR'
+    n_args = 2
+
+
+class Rcr(Instruction):
+    name = 'SAL'
+    n_args = 2
+
+
+class Rcl(Instruction):
+    name = 'SAR'
     n_args = 2
