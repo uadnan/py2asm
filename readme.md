@@ -198,3 +198,106 @@ PRINT    "Hello World!$"
 ```
 
 ## 3. Raw Instructions: 
+
+Any raw instruction can be provided by using ```asm.Raw```
+
+```python
+import py2asm as asm
+
+with asm.Program():
+    asm.Raw(
+        'MOV AH, 10', # Instruction provided in string
+        asm.Mov(asm.Register.AH, 10), # Using py2asm instructions
+    )
+```
+
+### A bit about Expressions
+Expression can be written as operator pipe like this
+
+```python
+import py2asm as asm
+
+with asm.Program():
+    x = asm.Variable('x', asm.VariableType.WORD, 10)
+    y = asm.Variable('y', asm.VariableType.WORD, 20)
+    
+    # equivalent to ((y / 2) - 4) * y 
+    y.div(2).sub(4).mul(y)
+```
+
+will generate
+```asm
+MOV      BX, 02h
+MOV      AX, y
+DIV      BX
+
+SUB      AX, 04h
+
+MOV      BX, AX
+MOV      AX, y
+MUL      BX
+```
+
+**But following should not be done**
+
+```python
+import py2asm as asm
+
+with asm.Program():
+    x = asm.Variable('x', asm.VariableType.WORD, 10)
+    y = asm.Variable('y', asm.VariableType.WORD, 20)
+    
+    # equivalent to (x * 5) + (y * 6) 
+    x.mul(5).add(y.mul(6)) # this will nt work
+
+    (x * 5) + (y * 6) # this will also not work
+```
+
+Instead you can use this
+```python
+import py2asm as asm
+
+with asm.Program():
+    x = asm.Variable('x', asm.VariableType.WORD, 10)
+    y = asm.Variable('y', asm.VariableType.WORD, 20)
+
+    (x * 5).mov(asm.Register.CX) # saved the result to CX so that
+                                      # further calculation won;t change value of AX
+    x <<= (y * 6) + asm.Register.CX
+    # <<= is used to store result of expression in x variable again
+    # ie MOV x, AX
+    asm.PrintNum(x)
+```
+
+This will produce following
+```asm
+include emu8086.inc
+
+org 100h
+
+.model small
+.stack 0100h
+
+.data
+x                DW   0Ah
+y                DW   14h
+
+DEFINE_PRINT_NUM_UNS
+DEFINE_PRINT_NUM
+
+.code
+MOV      BX, x
+MOV      AL, 05h
+MUL      BX
+
+MOV      CX, AX
+
+MOV      BX, y
+MOV      AL, 06h
+MUL      BX
+
+ADD      AX, CX
+
+MOV      x, AX
+CALL     PRINT_NUM
+```
