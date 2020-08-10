@@ -29,6 +29,10 @@ class Define(AsmType):
         return None
 
 
+class Array:
+    pass
+
+
 class VariableType:
     BYTE = 'DB'
     WORD = 'DW'

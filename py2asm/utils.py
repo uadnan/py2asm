@@ -25,6 +25,7 @@ def format_argument(arg):
 
     from py2asm.data import Variable, Define
     from py2asm.registers import Register, RegisterType
+    from py2asm.functions import Raw
 
     if isinstance(arg, (Variable, Register, RegisterType, Define)):
         return arg.name

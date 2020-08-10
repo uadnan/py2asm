@@ -47,6 +47,7 @@ org 100h
 
     def __exit__(self, exc_type, exc_val, exc_tb):
         _state.current_program = None
+        print(self.render())
         super().__exit__(exc_type, exc_val, exc_tb)
 
     @staticmethod

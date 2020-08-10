@@ -5,3 +5,4 @@ from .functions import *
 from .data import Variable, VariableType, Define
 from .types import AsmType
 from .registers import Register
+from .utils import mark_safe

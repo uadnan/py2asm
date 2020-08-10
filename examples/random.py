@@ -19,5 +19,3 @@ if __name__ == "__main__":
             x <<= (a * x + c) % m
             asm.PrintNum(x)
             asm.Print(", ")
-
-        print(p.render())

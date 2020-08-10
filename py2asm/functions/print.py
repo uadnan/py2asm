@@ -6,8 +6,8 @@ from py2asm.data import Variable
 from py2asm.registers import Register
 from py2asm.functions.base import Function, Raw
 from py2asm.functions.groups import BiosProcedureCall
-from py2asm.instructions import Lea, Mov, Call
-from py2asm.utils import format_argument
+from py2asm.instructions import Lea, Mov, Cbw, Call, Add
+from py2asm.utils import format_argument, is_byte
 
 _state = threading.local()
 
@@ -78,9 +78,33 @@ class PrintNum(Function):
         super().__init__()
 
     def get_instructions(self):
+        if is_byte(self.data_var):
+            return (
+                Mov(Register.AL, self.data_var),
+                Cbw(),
+                Call("PRINT_NUM")
+            )
+
         return (
             Mov(Register.AX, self.data_var),
             Call("PRINT_NUM")
+        )
+
+
+class PrintNumChar(Function):
+    def __init__(self, data):
+        if not isinstance(data, (int, Variable, Register)):
+            raise ValueError('Unsupported type: {}'.format(type(data)))
+
+        self.data_var = data
+        super().__init__()
+
+    def get_instructions(self):
+        reg = Register.DL if is_byte(self.data_var) else Register.DX
+        return (
+            Mov(reg, self.data_var),
+            Add(Register.DL, '0'),
+            BiosProcedureCall(0x2)
         )
 
 
@@ -88,6 +112,7 @@ class PrintType(Enum):
     PRINT_STR = PrintStr
     PRINT_STR_BUILTIN = PrintStrBuiltin
     PRINT_CHAR = PrintChar
+    PRINT_NUM_CHAR = PrintNumChar
     PRINT_NUM_BUILTIN = PrintNum
     # TODO: PRINT_NUM
 

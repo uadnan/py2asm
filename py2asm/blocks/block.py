@@ -21,6 +21,7 @@ class BlockBase:
         if self.parent is None:
             self.root = self
             self.loop_counter = 0
+            self.condition_counter = 0
         else:
             self.root = self.parent.root
             self.parent.append(self)

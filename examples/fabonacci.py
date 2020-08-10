@@ -14,6 +14,3 @@ if __name__ == "__main__":
             n1 <<= n2
             n2 <<= asm.Register.AX
             count += 1
-
-        print(p.render())
-

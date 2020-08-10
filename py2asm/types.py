@@ -72,3 +72,13 @@ class AsmType(Operatable):
             ),
             JumpTypes.JumpLessEqual
         )
+
+    def __eq__(self, other):
+        from .registers import Register
+        return (
+            (
+                Mov(Register.AL, self),
+                Cmp(Register.AL, other)
+            ),
+            JumpTypes.JumpEqual
+        )
