@@ -78,5 +78,123 @@ with asm.Program():
         pass
 ```
 
-### 2. Functions
-### 3. Raw Instructions: 
+## 2. Functions
+Functions are just collection of instructions for most repeated tasks.
+
+### InputChar
+Single character input
+
+```python
+import py2asm as asm
+
+with asm.Program():
+    asm.InputChar(echo=True) # can be false
+```
+
+it should outputs following
+```asm
+MOV      AH, 1
+INT      21h
+```
+
+### PrintStr
+Prints string that ends with '$'
+
+```python
+import py2asm as asm
+
+with asm.Program():
+    msg = asm.Variable('msg', asm.VariableType.BYTE, "Hello World!$")
+    asm.PrintStr(msg)
+```
+
+it should outputs following
+```asm
+LEA      DX, msg
+MOV      AH, 09h
+INT      21h
+```
+
+### PrintChar
+Prints single char
+
+```python
+import py2asm as asm
+
+with asm.Program():
+    asm.PrintChar('C')
+```
+
+it should outputs following
+```asm
+MOV      DL, 'C'
+MOV      AH, 02h
+INT      21h
+```
+
+### PrintNumChar
+Prints single char
+
+```python
+import py2asm as asm
+
+with asm.Program():
+    asm.PrintNumChar(7)
+```
+
+it should outputs following
+```asm
+MOV      DL, 07h
+ADD      DL, '0'
+MOV      AH, 02h
+INT      21h
+```
+
+### PrintNum
+Print any unsigned number by including emu8086.inc
+
+```python
+import py2asm as asm
+
+with asm.Program():
+    asm.PrintNum(1234)
+```
+
+it should outputs following
+```asm
+include emu8086.inc
+
+org 100h
+
+.model small
+.stack 0100h
+
+.data
+
+
+DEFINE_PRINT_NUM_UNS
+DEFINE_PRINT_NUM
+
+.code
+MOV      AX, 04D2h
+CALL     PRINT_NUM
+```
+
+### PrintStrBuiltin
+Prints string by including emu8086.inc
+
+```python
+import py2asm as asm
+
+with asm.Program():
+    asm.PrintStrBuiltin("Hello World!$")
+```
+
+it should outputs following
+```asm
+include emu8086.inc
+
+PRINT    "Hello World!$"
+```
+
+## 3. Raw Instructions: 

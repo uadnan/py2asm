@@ -16,9 +16,6 @@ class Instruction:
         self.args = args
 
     def render(self):
-        if self.n_args == 2 and self.args[0] == self.args[1]:
-            return ''
-
         return self.template.format(
             name=self.name,
             operands=self.render_operands()
