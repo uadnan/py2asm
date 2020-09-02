@@ -1,4 +1,5 @@
 # py2asm
+This program will help to generate complex asembly code.
 
 There are 3 level structures in py2asm:
 ## 1. Blocks
